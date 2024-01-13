@@ -806,12 +806,7 @@ int main(){
         Testmatrix.push_back(columns);
     }
     file.close();
- for (size_t i = 0; i < Testmatrix.size(); ++i) {
-        for (size_t j = 0; j < Testmatrix[i].size(); ++j) {
-            std::cout << Testmatrix[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+
 
 int option=0;
 
@@ -947,12 +942,6 @@ while (option != 4) {
                     coloane.push_back(step->save_file());
                 Testmatrix.push_back(coloane);
 
-                for (size_t i = 0; i < Testmatrix.size(); ++i) {
-        for (size_t j = 0; j < Testmatrix[i].size(); ++j) {
-            std::cout << Testmatrix[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
                 break;
             }
 
