@@ -1,0 +1,7 @@
+untitlu
+odescriere
+
+Title step with title salu and subtitle: nu
+NumberInput step with description numar and input 1.200000
+NumberInput step with description lop and input 2.300000
+Title step with title titl and subtitle: niciodata

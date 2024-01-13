@@ -1,0 +1,6 @@
+titlunum
+descrierebuna
+
+Title step with title saut and subtitle: buna
+NumberInput step with description niciodata and input 2.400000
+CSVFileStep step with description odata and filename alex.csv
