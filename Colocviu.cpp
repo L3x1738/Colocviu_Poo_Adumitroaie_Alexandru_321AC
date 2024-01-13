@@ -639,63 +639,38 @@ public:
         
     }
     void execute() {
-       int chosenStep;
-    int ok = 0;
+        int chosenStep;
+        cout<<"Please enter the file step to open: ";
+       cin >> chosenStep;
 
-    do {
-        try {
-            cout << "Please enter the file step to open (or -1 to exit): ";
-            cin >> chosenStep;
+    while (chosenStep < 0 || chosenStep >= x.size() ||
+           (x[chosenStep]->get_name() != "CSVFileStep" && x[chosenStep]->get_name() != "TextFileStep")) {
+        cout << "Invalid step number. Please enter a valid step number: ";
+        cin >> chosenStep;
+    }
 
-            if (chosenStep == -1) {
-                cout << "Exiting DisplayStep." << endl;
-                ok = 1;
-                break;
-            }
-
-            if (chosenStep < 0 || chosenStep >= x.size() ||
-                (x[chosenStep]->get_name() != "CSVFileStep" && x[chosenStep]->get_name() != "TextFileStep")) {
-                cout << "Invalid step number. Please enter a valid step number or -1 to exit." << endl;
-                continue;
-            }
-
-            step = chosenStep;
-
-            if (x[step]->get_name() == "CSVFileStep") {
-                CSVFileStep *CSVStep = dynamic_cast<CSVFileStep *>(x[step]);
+  
+    step = chosenStep;
+        if(x[step]->get_name()=="CSVFileStep")
+           {
+             CSVFileStep *CSVStep = dynamic_cast<CSVFileStep*>(x[step]);
                 ifstream inputFile(CSVStep->get_csv_name());
-
-                if (!inputFile.is_open()) {
-                    throw runtime_error("Error: Unable to open CSV file.");
-                }
-
                 string line;
-                while (getline(inputFile, line)) {
-                    cout << line << endl;
-                }
-            } else {
-                TextFileStep *TextStep = dynamic_cast<TextFileStep *>(x[step]);
-                ifstream inputFile(TextStep->get_txt_name());
-
-                if (!inputFile.is_open()) {
-                    throw runtime_error("Error: Unable to open text file.");
-                }
-
-                string line;
-                while (getline(inputFile, line)) {
-                    cout << line << endl;
-                }
-            }
-
-            ok = 1;
-
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+             while (getline(inputFile, line)) {
+            cout << line << endl;
         }
+           }
 
-    } while (!ok);
+        else 
+        {
+            TextFileStep *TextStep = dynamic_cast<TextFileStep*>(x[step]);
+                ifstream inputFile(TextStep->get_txt_name());
+                string line;
+             while (getline(inputFile, line)) {
+            cout << line << endl;
+        }
+    }
+
 }
         string to_file()
     {
