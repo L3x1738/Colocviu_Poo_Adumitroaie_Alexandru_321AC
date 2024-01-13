@@ -4,57 +4,39 @@
 #include <fstream>
 #include <sstream>
 #include <climits>
-///Test
+///Testare
 using namespace std;
 
-class Calculator
-{
+template<typename T>
+class Calculator {
 public:
-
-
-    float add(float a, float b)
-    {
+    T add(T a, T b) {
         return a + b;
     }
 
-
-    float sub(float a,float b)
-    {
+    T sub(T a, T b) {
         return a - b;
     }
 
-
-    float mul(float a, float b)
-    {
+    T mul(T a, T b) {
         return a * b;
     }
 
-    float div(float a, float b)
-    {
-        if (b == 0)
-        {
-            cout << "Division By Zero" <<
-                     endl;
-            return 0;
-        }
-        else
-        {
+    T div(T a, T b) {
+        if (b == 0) {
+            std::cout << "Division By Zero" << std::endl;
+            return static_cast<T>(0);
+        } else {
             return a / b;
         }
     }
 
-    float mini(float a, float b)
-    {
-        if(a<b)
-        return a;
-        return b;
+    T mini(T a, T b) {
+        return (a < b) ? a : b;
     }
 
-    float maxi(float a, float b)
-    {
-        if(a>b)
-        return a;
-        return b;
+    T maxi(T a, T b) {
+        return (a > b) ? a : b;
     }
 };
 
@@ -454,8 +436,22 @@ public:
 class ProcessBuilder {
 private:
     vector<Step*> steps;
-
+    string name;
+    string description;
 public:
+    void set_stuff(string n,string d)
+    {
+        name=n;
+        description=d;
+    }
+    string get_name()
+    {
+        return name;
+    }
+    string get_desc()
+    {
+        return description;
+    }
     ~ProcessBuilder() {
         for (auto& step : steps) {
             delete step;
@@ -488,9 +484,16 @@ public:
         return crr_steps;
     }
     void add_flow()
-    {
+    {   string n,d;
+        cout<<"Please enter the name for the flow ";
+        cin>>n;
+        cout<<"Please enter the description ";
+        cin>>d;
+        name=n;
+        description=d;
         ofstream f;
     f.open("flows.csv", ios::app);
+    f<<n<<','<<d<<',';
     for (const auto& step : steps)
     {
         f << step->save_file();
@@ -499,7 +502,14 @@ public:
     f << endl;
     f.close();
     }
+     void clearSteps() {
+        for (auto& step : steps) {
+            delete step;
+        }
+        steps.clear();
+    }
 };
+
 
 class CalculusStep: public Step{
 private:
@@ -548,7 +558,7 @@ public:
         numberInputs[i] = numStep->get_val();
     }
 
-    Calculator c;
+    Calculator<float> c;
     if(operation=="+")
     {   float re;
         re = numberInputs[0];
@@ -773,25 +783,50 @@ public:
     }
 };
 
-int main(){
+int main(){ 
 
      ProcessBuilder processBuilder;
-     vector<vector<string>> Testmatrix={
-    {"Title:saut-buna-","NumberInput:niciodata-","CSVFileStep:odata-","CalculusStep:","TextFileStep:da-","DisplayStep:","OutputStep:nume.txt-titlunum-descrierebuna-","EndStep:"}
-};
+     vector<vector<string>> Testmatrix;
+     //{{"Title:saut-buna-","NumberInput:niciodata-","CSVFileStep:odata-","CalculusStep:","TextFileStep:da-","DisplayStep:","OutputStep:nume.txt-titlunum-descrierebuna-","EndStep:"}};
+    string line;
+
+    ifstream file("flows.csv");
+    while (std::getline(file, line)) {
+        
+        std::stringstream ss(line);
+
+        std::vector<std::string> columns;
+
+        
+        std::string column;
+        while (std::getline(ss, column, ',')) {
+            columns.push_back(column);
+        }
+
+        Testmatrix.push_back(columns);
+    }
+    file.close();
+ for (size_t i = 0; i < Testmatrix.size(); ++i) {
+        for (size_t j = 0; j < Testmatrix[i].size(); ++j) {
+            std::cout << Testmatrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 
 int option=0;
 
-while (option != 3) {
+while (option != 4) {
         cout << "Welcome to my application for creating flows. Please choose an option:" << endl;
         cout << "1. Create a flow." << endl;
         cout << "2. Use a flow" << endl;
-        cout << "3. Exit" << endl;
+        cout << "3. Delete a flow" << endl;
+        cout << "4. Exit"<<endl;
         cout << "Enter your choice: ";
         cin >> option;
 
         switch (option) {
             case 1: {
+                processBuilder.clearSteps();
                 int step = 0;
                 while (step != 10) {
                     cout << "\n1. Title step" << endl;
@@ -804,7 +839,6 @@ while (option != 3) {
                     cout << "8. Display step" << endl;
                     cout << "9. Output step" << endl;
                     cout << "10. End step" << endl << endl;
-
                     cout << "Please choose a step to add: ";
                     cin >> step;
 
@@ -906,15 +940,30 @@ while (option != 3) {
                     }
                 }
                 processBuilder.add_flow();
+                vector <string> coloane;
+                coloane.push_back(processBuilder.get_name());
+                coloane.push_back(processBuilder.get_desc());
+                for(auto& step: processBuilder.get_current_steps())
+                    coloane.push_back(step->save_file());
+                Testmatrix.push_back(coloane);
+
+                for (size_t i = 0; i < Testmatrix.size(); ++i) {
+        for (size_t j = 0; j < Testmatrix[i].size(); ++j) {
+            std::cout << Testmatrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
                 break;
             }
 
             case 2:
             {
+                processBuilder.clearSteps();
                 int x;
                 cout<<"please enter the flow you want to use";
                 cin>>x;
-                for(int i=0;i<Testmatrix[x].size();i++)
+                processBuilder.set_stuff(Testmatrix[x][0],Testmatrix[x][1]);
+                for(size_t i=2;i<Testmatrix[x].size();i++)
 {
     string word;
     istringstream iss(Testmatrix[x][i]);
@@ -1030,6 +1079,38 @@ processBuilder.executeSteps();
                 break;
             }
             case 3:
+            {
+            
+                cout<<"please enter the flow you want to delete: ";
+size_t rowToDelete ;
+cin>>rowToDelete;
+    // Check if the row index is valid
+    if (rowToDelete < Testmatrix.size()) {
+        // Use erase to remove the row
+        Testmatrix.erase(Testmatrix.begin() + rowToDelete);
+
+        // Display the updated matrix
+        for (const auto& row : Testmatrix) {
+            for (const auto& column : row) {
+                std::cout << column << " ";
+            }
+            std::cout << std::endl;
+        }
+    } else {
+        std::cerr << "Invalid row index." << std::endl;
+    }
+
+    ofstream g("flows.csv");
+    for (const auto& row : Testmatrix) {
+        for (const auto& column : row) {
+            g << column << ",";
+        }
+        g << std::endl;
+    }
+g.close();
+           break;
+            }
+            case 4:
                 cout << "Exiting..." << endl;
                 break;
             default:

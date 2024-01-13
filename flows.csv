@@ -1,3 +1,3 @@
-Title:da-da-,TextStep:da-da-,NumberInput:nu-,DisplayStep:,EndStep:
-TextInputStep:salut-,DisplayStep:,DisplayStep:,CalculusStep:,EndStep:,
-TextFileStep:da-,EndStep:,
+nume,descriere,Title:titl-da-,NumberInput:da-,DisplayStep:,EndStep:,
+nume2,descriere2,NumberInput:salut-,TextFileStep:buna-,DisplayStep:,EndStep:,
+nume6,descriere6,Title:titlu-salut-,NumberInput:salariu-,NumberInput:bonus-,CalculusStep:,EndStep:,
